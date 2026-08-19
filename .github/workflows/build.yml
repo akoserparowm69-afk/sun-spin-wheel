@@ -26,16 +26,31 @@ jobs:
         with:
           gradle-version: '9.3.1'
 
-      - name: Prepare Config & Licenses
+      - name: Prepare Config & Accurate JSON
         run: |
           yes | sdkmanager --licenses || true
 
-          # Inject dummy google-services.json to bypass Google plugin checks
+          # Create exact google-services.json matching the package name
           mkdir -p app/src/main app/src/debug
           cat << 'EOF' > app/google-services.json
           {
-            "project_info": { "project_number": "1234567890", "project_id": "dummy-project" },
-            "client": [{ "client_info": { "mobilesdk_app_id": "1:1234567890:android:abcdef", "android_client_info": { "package_name": "com.example" } }, "oauth_client": [], "api_key": [], "services": {} }],
+            "project_info": {
+              "project_number": "1234567890",
+              "project_id": "spinwheel-app"
+            },
+            "client": [
+              {
+                "client_info": {
+                  "mobilesdk_app_id": "1:1234567890:android:abcdef",
+                  "android_client_info": {
+                    "package_name": "com.aistudio.spinwheel.kwzqva"
+                  }
+                },
+                "oauth_client": [],
+                "api_key": [],
+                "services": {}
+              }
+            ],
             "configuration_version": "1"
           }
           EOF

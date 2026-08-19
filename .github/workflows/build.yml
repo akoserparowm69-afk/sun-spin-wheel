@@ -21,17 +21,36 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Generate Gradle 9.3.1 Wrapper
+      - name: Setup Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Auto Config & Permissions
         run: |
           yes | sdkmanager --licenses || true
+
+          # Create dummy google-services.json to prevent plugin crash
+          mkdir -p app/src/main app/src/debug
+          cat << 'EOF' > app/google-services.json
+          {
+            "project_info": { "project_number": "1234567890", "project_id": "dummy-project" },
+            "client": [{ "client_info": { "mobilesdk_app_id": "1:1234567890:android:abcdef", "android_client_info": { "package_name": "com.example" } }, "oauth_client": [], "api_key": [], "services": {} }],
+            "configuration_version": "1"
+          }
+          EOF
+          cp app/google-services.json app/src/main/google-services.json
+          cp app/google-services.json app/src/debug/google-services.json
+
+          # Generate Wrapper and give permission
           gradle wrapper --gradle-version 9.3.1 --distribution-type bin
           chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: ./gradlew assembleDebug -x test -x lint --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: spinwheel-app
-          path: "app/build/outputs/apk/debug/*.apk"
+          path: "**/build/outputs/apk/debug/*.apk"

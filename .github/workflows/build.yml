@@ -26,11 +26,11 @@ jobs:
         with:
           gradle-version: '9.3.1'
 
-      - name: Auto Config & Permissions
+      - name: Prepare Config & Licenses
         run: |
           yes | sdkmanager --licenses || true
 
-          # Create dummy google-services.json to prevent plugin crash
+          # Inject dummy google-services.json to bypass Google plugin checks
           mkdir -p app/src/main app/src/debug
           cat << 'EOF' > app/google-services.json
           {
@@ -42,14 +42,10 @@ jobs:
           cp app/google-services.json app/src/main/google-services.json
           cp app/google-services.json app/src/debug/google-services.json
 
-          # Generate Wrapper and give permission
-          gradle wrapper --gradle-version 9.3.1 --distribution-type bin
-          chmod +x gradlew
-
       - name: Build Debug APK
         run: gradle assembleDebug -x test -x lint --no-daemon --stacktrace
 
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: spinwheel-app

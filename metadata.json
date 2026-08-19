@@ -1,0 +1,6 @@
+{
+  "name": "Spin Wheel",
+  "description": "A customizable lucky spin wheel with slice distribution, center logo, and celebration effects.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

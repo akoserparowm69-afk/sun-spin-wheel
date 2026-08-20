@@ -33,27 +33,27 @@ jobs:
           # Create exact google-services.json matching the package name
           mkdir -p app/src/main app/src/debug
           cat << 'EOF' > app/google-services.json
-          {
-            "project_info": {
-              "project_number": "1234567890",
-              "project_id": "spinwheel-app"
-            },
-            "client": [
-              {
-                "client_info": {
-                  "mobilesdk_app_id": "1:1234567890:android:abcdef",
-                  "android_client_info": {
-                    "package_name": "com.aistudio.spinwheel.kwzqva"
-                  }
-                },
-                "oauth_client": [],
-                "api_key": [],
-                "services": {}
-              }
-            ],
-            "configuration_version": "1"
-          }
-          EOF
+{
+  "project_info": {
+    "project_number": "1234567890",
+    "project_id": "spinwheel-app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1234567890:android:abcdef",
+        "android_client_info": {
+          "package_name": "com.aistudio.spinwheel.kwzqva"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {}
+    }
+  ],
+  "configuration_version": "1"
+}
+EOF
           cp app/google-services.json app/src/main/google-services.json
           cp app/google-services.json app/src/debug/google-services.json
 

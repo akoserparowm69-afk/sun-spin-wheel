@@ -29,18 +29,16 @@ jobs:
       - name: Prepare Required Files
         run: |
           yes | sdkmanager --licenses || true
-
-          # 1. SDK Platform 36 & Build Tools
           sdkmanager "platforms;android-36" "build-tools;34.0.0" || true
 
-          # 2. Generate required .env and .env.example files for Secrets Plugin
+          # Create .env files
           touch .env .env.example
           touch app/.env app/.env.example
 
-          # 3. Generate required debug.keystore
+          # Generate debug.keystore
           keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
-          # 4. Generate google-services.json for both possible package names
+          # Generate google-services.json
           mkdir -p app/src/main app/src/debug
           cat << 'EOF' > app/google-services.json
           {
@@ -62,7 +60,7 @@ jobs:
           cp app/google-services.json app/src/debug/google-services.json
 
       - name: Build Debug APK
-        run: gradle assembleDebug -x test -x lint -x roborazziDebug --no-daemon --stacktrace
+        run: gradle :app:assembleDebug -x test -x lint --no-daemon --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
